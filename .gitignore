@@ -1,0 +1,17 @@
+# Python-related
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+
+# Misc
+.DS_Store
+*.png
