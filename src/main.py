@@ -28,7 +28,7 @@ async def process_articles(
             
             # Send to Telegram
             success = await telegram_bot.send_message(
-                text=tweet,
+                text=f"{tweet}\n\n{article['url']}",
                 image_bytes=image_bytes
             )
             
@@ -52,9 +52,8 @@ async def main():
         )
         
         parser = GDELTNewsParser(parser_config)
-        tweet_generator = TweetGenerator(config["HUGGINGFACE_API_TOKEN"])
-        # Ideally use a different token: config["HUGGINGFACE_IMAGE_TOKEN"]
-        image_generator = ImageGenerator(config["HUGGINGFACE_API_TOKEN"])
+        tweet_generator = TweetGenerator(config["HUGGINGFACE_LLM_TOKEN"])
+        image_generator = ImageGenerator(config["HUGGINGFACE_IMAGE_TOKEN"])
         telegram_bot = TelegramBot(config["BOT_TOKEN"], config["CHAT_ID"])
         
         # Use fixed dates for article search

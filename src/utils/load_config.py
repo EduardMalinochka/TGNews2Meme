@@ -15,7 +15,7 @@ def load_config(env_file: str = ".env") -> Dict[str, str]:
     load_dotenv(env_file)
     
     # Required configurations
-    required_vars = ["BOT_TOKEN", "CHAT_ID", "HUGGINGFACE_API_TOKEN"]
+    required_vars = ["BOT_TOKEN", "CHAT_ID", "HUGGINGFACE_LLM_TOKEN", "HUGGINGFACE_IMAGE_TOKEN"]
     config = {}
     
     for var in required_vars:
