@@ -93,7 +93,7 @@ class TweetGenerator:
                     continue
                     
                 tweet = textwrap.shorten(
-                    response.strip(), 
+                    response.strip('\'" \t\n\r\v\f'), 
                     width=280, 
                     placeholder="..."
                 )
