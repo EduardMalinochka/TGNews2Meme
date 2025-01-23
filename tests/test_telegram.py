@@ -17,7 +17,7 @@ class AsyncContextManagerMock:
 @pytest.fixture
 def telegram_bot():
     """Fixture for creating a TelegramBot instance with mocked dependencies."""
-    with patch("src.telegram.bot.Bot") as mock_bot_class:
+    with patch("src.tg_bot.sending_bot.Bot") as mock_bot_class:
         # Create a single mock instance to track all calls
         mock_bot_instance = AsyncMock()
         mock_bot_instance.send_message = AsyncMock()
