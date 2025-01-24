@@ -7,6 +7,7 @@ from llm.tweet_generator import TweetGenerator
 from tg_bot.sending_bot import TelegramBot
 from utils.load_config import load_config
 from image_generation.meme_creator import ImageGenerator
+from memory.news_storage import NewsStorage
 
 import logging
 logger = logging.getLogger(__name__)
@@ -15,11 +16,18 @@ async def process_articles(
     articles: List[Dict], 
     tweet_generator: TweetGenerator, 
     image_generator: ImageGenerator,
-    telegram_bot: TelegramBot
+    telegram_bot: TelegramBot,
+    news_storage: NewsStorage
 ):
     """Process articles and send them to Telegram with generated images."""
     for article in articles:
         try:
+            # Check if title is new
+            success, similar_titles = await news_storage.add_title(article['title'])
+            if not success:
+                logger.info(f"Skipping duplicate title: {article['title']}")
+                continue
+
             # Generate tweet
             tweet = await tweet_generator.generate_tweet(article['title'])
             
@@ -56,6 +64,13 @@ async def main():
         image_generator = ImageGenerator(config["HUGGINGFACE_IMAGE_TOKEN"])
         telegram_bot = TelegramBot(config["BOT_TOKEN"], config["CHAT_ID"])
         
+        # Initialize NewsStorage
+        news_storage = NewsStorage(
+            supabase_url=config["SUPABASE_URL"],
+            supabase_key=config["SUPABASE_KEY"]
+        )
+        await news_storage.initialize_database()  # Initialize database schema
+        
         # Use fixed dates for article search
         start_date = date(2020, 5, 10)
         end_date = date(2020, 5, 11)
@@ -70,12 +85,13 @@ async def main():
         # Take the top 5 articles
         top_articles = articles_df.head(5).to_dict('records')
         
-        # Process articles with image generation
+        # Process articles with duplicate checking
         await process_articles(
             top_articles, 
             tweet_generator, 
             image_generator,
-            telegram_bot
+            telegram_bot,
+            news_storage  # Pass storage instance
         )
         
     except Exception as e:
