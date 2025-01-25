@@ -50,7 +50,7 @@ async def process_articles(
 async def main():
     try:
         # Load configuration
-        config = load_config('/Users/eduardlukutin/Desktop/tg_commenter/.env')
+        config = load_config()
         
         # Initialize components
         parser_config = ParserConfig(

@@ -1,17 +1,17 @@
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 from typing import Dict
 
-def load_config(env_file: str = ".env") -> Dict[str, str]:
+def load_config() -> Dict[str, str]:
     """
     Load configuration from the .env file or environment variables.
-    
-    Args:
-        env_file (str): Path to the .env file
-        
+            
     Returns:
         Dict[str, str]: Dictionary containing configuration values
     """
+    project_root = Path(__file__).resolve().parent.parent.parent
+    env_file = project_root / ".env"
     load_dotenv(env_file)
     
     # Required configurations
