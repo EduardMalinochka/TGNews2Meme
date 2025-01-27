@@ -1,0 +1,18 @@
+# Ignore credentials/secrets
+.env
+
+# Ignore version-control and editor artifacts
+.git
+.gitignore
+.DS_Store
+*.swp
+*.swo
+
+# Ignore Python bytecode and test cache
+__pycache__
+*.pyc
+.pytest_cache
+
+# Ignore local virtual environments
+venv
+.venv
